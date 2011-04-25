@@ -1,0 +1,6 @@
+.tmp*
+*.pyc*
+.DS_Store*
+.project*
+.pydevproject*
+.settings
