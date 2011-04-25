@@ -1,5 +1,12 @@
+## Overview
 Some practical implementations of popular machine learning algorithms.
 Data is partially taken from the LIBSVM data sets[1].
 
+### Currently implemented
 
+### TODO
+* linear regression
+* logistic regression
+
+### Links
 [1] http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/
