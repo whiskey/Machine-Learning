@@ -4,6 +4,7 @@ Created on Apr 25, 2011
 @author: Carsten Witzke
 '''
 from pydoc import deque
+import os
 
 class LibsvmFileImporter(object):
     '''
@@ -17,7 +18,7 @@ class LibsvmFileImporter(object):
         New file importer with file from given URL string
         '''
         try:
-            self.__file = open(filename, 'r')
+            self.__file = open(os.path.abspath(filename), 'r')
             #self.__data = []
             self.__read_data()
         except IOError:

@@ -4,7 +4,7 @@ Created on Apr 25, 2011
 @author: Carsten Witzke
 '''
 import unittest
-from de.staticline.ml.LibsvmTools import LibsvmFileImporter
+from de.staticline.tools.LibsvmTools import LibsvmFileImporter
 from tempfile import mkstemp
 import os
 
