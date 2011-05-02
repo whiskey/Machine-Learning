@@ -4,6 +4,7 @@ Created on Apr 29, 2011
 @author: Carsten Witzke
 '''
 from de.staticline.tools.LibsvmTools import LibsvmFileImporter
+import math
 
 class Always1Predictor(object):
     '''
@@ -14,25 +15,27 @@ class Always1Predictor(object):
         pass
     
     def buildClassifier(self, trainFile):
-        '''builds a classification model returning always 1 for each instance'''
+        '''"builds" a classification model returning always 1 for each instance'''
         train = LibsvmFileImporter(trainFile)
-        train.get_data()
+        self.__inst_train = len(train.get_data())
+        # no real training here
     
     def validateModel(self, testFile):
         test = LibsvmFileImporter(testFile)
         testdata = test.get_data()
-
+        self.__inst_test = len(testdata)
         ## --- statistics
         correct = 0.
+        sum_error = 0
         for i in testdata:
             if i['class'] == 1: #correct
                 correct += 1.
+            else:
+                sum_error += math.pow(1 - i['class'], 2)
         # percent correct
-        self.__pct_correct = 100 * (correct/len(testdata))
+        self.__pct_correct = 100 * (correct/self.__inst_test)
         # root mean squared error
-        # assuming classes {-1,1} the error can be computed IN THIS CASE as
-        # 2 * (instances_total - instances_correct)
-        self.__rmse = 2 * (len(testdata) - correct)
+        self.__rmse = math.sqrt(sum_error / self.__inst_test)
         
     def get_pctCorrect(self):
         return self.__pct_correct
@@ -40,7 +43,15 @@ class Always1Predictor(object):
     def get_rmse(self):
         return self.__rmse
     
+    def get_inst_train(self):
+        return self.__inst_train
+
+    def get_inst_test(self):
+        return self.__inst_test
+    
     #properties
+    inst_train = property(get_inst_train, doc='number of training instances')
+    inst_test = property(get_inst_test, doc='number of test instances')
     pct_correct = property(get_pctCorrect, doc='the percentage of correct instances')
     rmse = property(get_rmse, doc='the root mean squared error')
 
