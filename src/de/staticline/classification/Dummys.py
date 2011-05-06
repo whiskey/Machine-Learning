@@ -16,18 +16,17 @@ class Always1Predictor(object):
     
     def buildClassifier(self, trainFile):
         '''"builds" a classification model returning always 1 for each instance'''
-        train = LibsvmFileImporter(trainFile)
-        self.__inst_train = len(train.get_data())
-        # no real training here
+        train = LibsvmFileImporter(trainFile).get_dataSet()
+        self.__inst_train = train.get_numInstances()
+        # no training needed
     
     def validateModel(self, testFile):
-        test = LibsvmFileImporter(testFile)
-        testdata = test.get_data()
-        self.__inst_test = len(testdata)
+        testdata = LibsvmFileImporter(testFile).get_dataSet()
+        self.__inst_test = testdata.get_numInstances()
         ## --- statistics
         correct = 0.
         sum_error = 0
-        for i in testdata:
+        for i in testdata.get_data():
             if i['class'] == 1: #correct
                 correct += 1.
             else:

@@ -17,7 +17,7 @@ class Test(unittest.TestCase):
         if self.__verbose:
             print '# instances\n    training:{tr:d}\n    test:{te:d}'.format(
                                 tr=dummy.get_inst_train(), te=dummy.get_inst_test())
-            print '% correct: {corr:2.3f} - RMSE: {rmse:.2f}'.format(
+            print '{corr:2.3f}% correct - RMSE: {rmse:.3f}'.format(
                                 corr=dummy.get_pctCorrect(), rmse=dummy.get_rmse())
         self.assertTrue(dummy.get_pctCorrect() > 24) # for data set a1a !!!
 

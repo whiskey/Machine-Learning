@@ -42,13 +42,13 @@ class Test(unittest.TestCase):
             l = LibsvmFileImporter(tmp[1])
             
             # 1. we have a result
-            self.assertTrue(l.get_data() is not None)
+            self.assertTrue(l.get_dataSet() is not None)
             # 2. class is loaded correct
-            self.assertTrue(l.get_data()[0]['class'] is -1)
+            self.assertTrue(l.get_dataSet()[0]['class'] is -1)
             # 3. comment lines correctly skipped
-            self.assertTrue(l.get_data()[2]['class'] is -1)
+            self.assertTrue(l.get_dataSet()[2]['class'] is -1)
             # 3a. floating point conversion
-            self.assertTrue(l.get_data()[2].get(85) == 1.155)
+            self.assertTrue(l.get_dataSet()[2].get(85) == 1.155)
         except Exception as e:
             print e
         finally:
