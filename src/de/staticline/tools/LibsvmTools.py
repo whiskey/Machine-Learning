@@ -5,6 +5,9 @@ Created on Apr 25, 2011
 '''
 from pydoc import deque
 import os
+from numpy.numarray.matrix import Matrix
+from numpy.numarray import matrix
+import numpy
 
 class LibsvmFileImporter(object):
     '''
@@ -24,7 +27,8 @@ class LibsvmFileImporter(object):
             raise IOError('No such file \'%s\'' % filename)
 
     def __read_data(self):
-        __dataList = []
+        dataList = []
+        max_f_index = 0
         for line in self.__file:
             try:
                 # strip comments, whitespaces and line breaks
@@ -40,12 +44,15 @@ class LibsvmFileImporter(object):
                 data_['class'] = int(tokens.popleft())
                 for token in tokens:
                     t = token.split(':')
-                    data_[int(t[0])] = float(t[1]) if '.' in t[1] else int(t[1])
-                __dataList.append(data_)
+                    feature = int(t[0])
+                    if feature > max_f_index:
+                        max_f_index = feature
+                    data_[feature] = float(t[1]) if '.' in t[1] else int(t[1])
+                dataList.append(data_)
             except Exception as e:
                 print line
                 print e
-        self.__dataSet = DataSet(__dataList)
+        self.__dataSet = DataSet(dataList, max_f_index)
         #print self.__dataSet.get_numInstances()
             
     def get_dataSet(self):
@@ -55,24 +62,34 @@ class LibsvmFileImporter(object):
 class DataSet(object):
     '''a data set'''
         
-    def __init__(self, data):
-        self.set_data(data)
-        #self.data = data
+    def __init__(self, data, max_f_index):
+        self.__data = data
+        self.__build_matrix(max_f_index)
+        self.__numInstances, self.__numFeatures = self.__matrix.shape
     
+    def __build_matrix(self, max_f_index):
+        self.__matrix = numpy.zeros(shape=(len(self.__data),len(range(max_f_index))))
+        for i in range(len(self.__data)):
+            for key, value in self.__data[i].iteritems():
+                # ignore label
+                if key == 'class': continue
+                self.__matrix[i][key-1] = value
+
     ## getter / setter ##
     def get_data(self):
         return self.__data
-
-    def set_data(self, newData):
-        self.__data = newData
-        self.__set_numInstances(len(self.__data))
+    
+    def get_matrix(self):
+        return self.__matrix
         
     def get_numInstances(self):
         return self.__numInstances
     
-    def __set_numInstances(self, num):
-        self.__numInstances = num
+    def get_numFeatures(self):
+        return self.__numFeatures
         
     ## properties
-    data = property(get_data, set_data)
+    data = property(get_data, doc='old data format: list of dictionaries')
+    matrix = property(get_matrix, doc='numpy matrix')
     numInstances = property(get_numInstances)
+    numFeatures = property(get_numFeatures)

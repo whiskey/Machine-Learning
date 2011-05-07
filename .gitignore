@@ -4,4 +4,6 @@
 .project*
 .pydevproject*
 .settings
+.checkstyle*
 data.db
+Playground.*

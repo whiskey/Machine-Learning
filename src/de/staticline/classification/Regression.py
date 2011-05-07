@@ -14,11 +14,11 @@ class RidgeRegression(object):
     def __init__(self):
         pass
 
-    def trainModel(self, trainFile):
-        pass
+    def trainModel(self, training):
+        training = matrix(training)
+        # means
+        means = training.mean(0)
+        # sum of squares
+        print training
+        print training - means
         
-    def play(self):
-        m = matrix('1 2 3; 4 5 6')
-        m2 = matrix('2 2; 2 2')
-        print m.transpose()
-        print m.sort(0)
