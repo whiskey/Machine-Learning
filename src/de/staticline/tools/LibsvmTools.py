@@ -5,8 +5,6 @@ Created on Apr 25, 2011
 '''
 from pydoc import deque
 import os
-from numpy.numarray.matrix import Matrix
-from numpy.numarray import matrix
 import numpy
 
 class LibsvmFileImporter(object):
