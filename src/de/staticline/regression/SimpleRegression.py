@@ -6,53 +6,49 @@ Created on Apr 29, 2011
 
 from numpy import *
 from math import sqrt
+from numpy.linalg.linalg import inv
 
 class RidgeRegression(object):
     '''
-    Ridge regression a.k.a. Tikhonov regularization
+    Ridge regression
     '''
 
-    def __init__(self):
-        pass
+    def __init__(self, complexity=1):
+        #lambda is keyword, so I'm using this instead
+        self.set_lambda(complexity)
 
     def trainModel(self, train):
-        training = matrix(train.get_matrix())
-        # means
-        means = training.mean(0)
-        # sum of squares
-        diff = training - means
-        #FIXME: currently only 2D
-        sxx = sum(multiply(diff[:,0],diff[:,0])) #sum (x-x')^2
-        rss = sum(multiply(diff[:,1],diff[:,1])) #sum (y-y')^2
-        sxy = sum(multiply(diff[:,0],diff[:,1])) #sum (x-x')(y-y')
+        x = matrix(train.get_matrix())
+        y = matrix(train.get_target())
+        xTx = dot(x.transpose(),x)
+        i = eye(xTx.shape[0],xTx.shape[1])
+        m1 = inv(xTx + self.__complexity * i)
+        self.__model = dot(dot(m1,x.transpose()),y)
+        print self.get_model()
         
-        self.__a = sxy / sxx
-        self.__b = float(means[:,1] - self.__a * means[:,0])
-        
-#        print 'slope = ',self.get_slope()
-#        print 'intercept = ',self.get_intercept()
-#        print 'rss = ',rss
-        
-    def validate_model(self, test):
+    def validate_model(self, test):#FIXME: make new
         testdata = matrix(test.get_matrix())
         sum_error = 0
-        for i in testdata:
-            x = float(i[:,0])
-            predicted = self.get_slope() * x + self.get_intercept()
-            target = float(i[:,1])
-            sum_error += (target - predicted)**2
-            #print 'f_predicted(%.1f) = %.3f  f_target(x) = %.3f' % (x, predicted, target)
-        print 'avg. error: %.4e' % (sum_error / test.get_numInstances())
+#        for i in testdata:
+#            x = float(i[:,0])
+#            predicted = self.get_slope() * x + self.get_intercept()
+#            target = float(i[:,1])
+#            sum_error += (target - predicted)**2
+#            #print 'f_predicted(%.1f) = %.3f  f_target(x) = %.3f' % (x, predicted, target)
+#        print 'avg. error: %.4e' % (sum_error / test.get_numInstances())
 
-    def get_slope(self):
-        return self.__a
-
-    def get_intercept(self):
-        return self.__b
+    def get_lambda(self):
+        return self.__complexity
+    
+    def set_lambda(self, value):
+        self.__complexity = value
+        
+    def get_model(self):
+        return self.__model
 
     def get_rmse(self):
-        return self.__rmse
+        return self.__rmse#TODO: implement rmse
 
-    a = property(doc='slope')
-    b = property(doc='intercept')
+    complexity = property(get_lambda, set_lambda, doc='the model complexity factor lambda')
+    model = property(get_model, doc='the learned model')
     rmse = property(doc='root mean squared error')
