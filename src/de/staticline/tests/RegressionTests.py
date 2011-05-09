@@ -10,7 +10,6 @@ from de.staticline.tools.LibsvmTools import DataSet
 
 class Test(unittest.TestCase):
 
-
     def testRidgeRegression(self):
         _x = matrix('1 1 2; 1 2 3; 1 4 1; 1 5 5')
         _y = matrix('3;2;7;1')

@@ -7,7 +7,6 @@ Created on Apr 29, 2011
 '''
 
 from numpy import *
-from math import sqrt
 from numpy.linalg.linalg import inv
 
 class RidgeRegression(object):
@@ -32,13 +31,7 @@ class RidgeRegression(object):
         f2 = y - dot(x,self.get_model())
         f3 = dot(dot(self.__complexity,self.__model.transpose()),self.__model)
         rss = dot(f1,f2) + f3
-        print 'RSS ?= %f' % rss
-        
-        #RSS old school
-        #diff = train.get_matrix() - self.__model
-        #print diff
-        #print diff**2
-        
+        print 'RSS = %f' % rss #TODO: validate RSS        
         
     def validate_model(self, test):#FIXME: make new
         testdata = matrix(test.get_matrix())
@@ -59,7 +52,6 @@ class RidgeRegression(object):
         
     def get_model(self):
         return self.__model
-
 
     complexity = property(get_lambda, set_lambda, doc='the model complexity factor lambda')
     model = property(get_model, doc='the learned model')
