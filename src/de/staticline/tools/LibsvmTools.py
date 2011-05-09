@@ -69,7 +69,6 @@ class DataSet(object):
         self.__data = data
         self.__build_matrix(max_f_index)
         self.__numInstances, self.__numFeatures = self.__matrix.shape
-        print 'data loaded'
     
     def __build_matrix(self, max_f_index):
         self.__matrix = numpy.zeros(shape=(len(self.__data),len(range(max_f_index))+1))

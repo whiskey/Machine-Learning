@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 '''
 Created on Apr 29, 2011
 
@@ -14,17 +16,29 @@ class RidgeRegression(object):
     '''
 
     def __init__(self, complexity=1):
-        #lambda is keyword, so I'm using this instead
+        #lambda is keyword, so I'm using complexity instead
         self.set_lambda(complexity)
 
     def trainModel(self, train):
         x = matrix(train.get_matrix())
         y = matrix(train.get_target())
+        
         xTx = dot(x.transpose(),x)
-        i = eye(xTx.shape[0],xTx.shape[1])
-        m1 = inv(xTx + self.__complexity * i)
+        m1 = inv(xTx + self.__complexity * eye(xTx.shape[0],xTx.shape[1]))
         self.__model = dot(dot(m1,x.transpose()),y)
-        print self.get_model()
+        
+        #RSS(λ) = (y − Xβ)T (y − Xβ) + λβT β
+        f1 = transpose(y - dot(x,self.get_model()))
+        f2 = y - dot(x,self.get_model())
+        f3 = dot(dot(self.__complexity,self.__model.transpose()),self.__model)
+        rss = dot(f1,f2) + f3
+        print 'RSS ?= %f' % rss
+        
+        #RSS old school
+        #diff = train.get_matrix() - self.__model
+        #print diff
+        #print diff**2
+        
         
     def validate_model(self, test):#FIXME: make new
         testdata = matrix(test.get_matrix())
@@ -46,9 +60,6 @@ class RidgeRegression(object):
     def get_model(self):
         return self.__model
 
-    def get_rmse(self):
-        return self.__rmse#TODO: implement rmse
 
     complexity = property(get_lambda, set_lambda, doc='the model complexity factor lambda')
     model = property(get_model, doc='the learned model')
-    rmse = property(doc='root mean squared error')

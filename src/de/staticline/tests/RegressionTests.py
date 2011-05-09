@@ -18,6 +18,7 @@ class Test(unittest.TestCase):
         rr = RidgeRegression(5)
         rr.trainModel(trainSet)
         #TODO: implement test case
+        print 'model:\n',rr.get_model()
         
 
 if __name__ == "__main__":
