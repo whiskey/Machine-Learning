@@ -89,7 +89,9 @@ class DataSet(object):
     def get_matrix(self):
         return self.__matrix
     
-    def get_target(self):
+    def get_target(self,index=None):
+        if index != None:
+            return int(self.__target[index])
         return self.__target
         
     def get_numInstances(self):

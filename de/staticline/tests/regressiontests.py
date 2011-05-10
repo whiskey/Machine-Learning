@@ -5,10 +5,10 @@ Created on May 6, 2011
 '''
 import unittest
 from numpy import *
-from de.staticline.regression.SimpleRegression import RidgeRegression
-from de.staticline.tools.LibsvmTools import DataSet
+from de.staticline.regression.simpleregression import RidgeRegression
+from de.staticline.tools.libsvmtools import DataSet
 
-class Test(unittest.TestCase):
+class RidgeRegressionTestCase(unittest.TestCase):
 
     def testRidgeRegression(self):
         _x = matrix('1 1 2; 1 2 3; 1 4 1; 1 5 5')
@@ -17,9 +17,8 @@ class Test(unittest.TestCase):
         rr = RidgeRegression(5)
         rr.trainModel(trainSet)
         #TODO: implement test case
-        print 'model:\n',rr.get_model()
+        #print 'model:\n',rr.get_model()
         
 
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testPlay']
     unittest.main()

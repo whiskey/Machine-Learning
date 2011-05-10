@@ -3,7 +3,7 @@ Created on Apr 29, 2011
 
 @author: Carsten Witzke
 '''
-from de.staticline.tools.LibsvmTools import LibsvmFileImporter
+from de.staticline.tools.libsvmtools import LibsvmFileImporter
 import math
 
 class Always1Predictor(object):

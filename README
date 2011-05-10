@@ -2,11 +2,24 @@
 Some practical implementations of popular machine learning algorithms.
 Data is partially taken from the LIBSVM data sets[1].
 
+### Usage
+Running the demo file is easy:
+$ python demo.py
+This should do it. Make sure NumPy is installed and added to your PYTHONPATH. To check this, type
+$ python
+and in the Python shell
+>> import numpy
+if no error occurs, NumPy is installed correctly.
+
 ### Currently implemented
+* Ridge Regression
 
 ### TODO
-* linear regression
+* fine tuning Ridge Regression
+* output validation R.R.
 * logistic regression
+* SVMs (SMO +variants)
+* make test suite
 
 ### Links
 [1] http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/
