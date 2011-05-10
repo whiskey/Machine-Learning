@@ -4,11 +4,17 @@ Data is partially taken from the LIBSVM data sets[1].
 
 ### Usage
 Running the demo file is easy:
-$ python demo.py
+
+    $ python demo.py
+    
 This should do it. Make sure NumPy is installed and added to your PYTHONPATH. To check this, type
-$ python
+
+    $ python
+    
 and in the Python shell
->> import numpy
+
+    >> import numpy
+    
 if no error occurs, NumPy is installed correctly.
 
 ### Currently implemented
