@@ -14,17 +14,22 @@ class LibsvmFileImporter(object):
     __file = None
     __dataSet = None
     
-    def __init__(self, filename):
+    def __init__(self, filename, binary=False):
         '''
         New file importer with file from given URL string
         '''
         try:
             self.__file = open(os.path.abspath(filename), 'r')
-            self.__read_data()
         except IOError:
             raise IOError('No such file \'%s\'' % filename)
+        
+        if binary:
+            self.__read_binary_data()
+        else:
+            self.__read_data()
 
     def __read_data(self):
+        '''reads (multi)labeled data'''
         dataList = []
         max_f_index = 0
         for line in self.__file:
@@ -39,7 +44,7 @@ class LibsvmFileImporter(object):
                 # something left? go!
                 data_ = {}
                 tokens = deque(line.split(' '))
-                data_['class'] = float(tokens.popleft())
+                data_['target'] = float(tokens.popleft())
                 for token in tokens:
                     t = token.split(':')
                     feature = int(t[0])
@@ -48,11 +53,42 @@ class LibsvmFileImporter(object):
                     data_[feature] = float(t[1]) if '.' in t[1] else int(t[1])
                 dataList.append(data_)
             except Exception as e:
-                print line
                 print e
         self.__dataSet = DataSet(dataList, max_f_index)
-        #print self.__dataSet.get_numInstances()
+    
+    def __read_binary_data(self):
+        '''reads data and checks for binary classes'''
+        targetList = []
+        dataList = []
+        max_f_index = 0
+        for line in self.__file:
+            # strip comments, whitespaces and line breaks
+            line = line[:line.find('#')]
+            line = line.strip('\n')
+            line = line.strip()
+            if line == '':
+                continue
             
+            # something left? go!
+            data_ = {}
+            tokens = deque(line.split(' '))
+            data_['target'] = float(tokens.popleft())
+            if len(targetList) <= 2:
+                if data_['target'] not in targetList:
+                    targetList.append(data_['target'])
+            else:
+                raise TypeError('Not a binary class file')
+            for token in tokens:
+                t = token.split(':')
+                feature = int(t[0])
+                if feature > max_f_index:
+                    max_f_index = feature
+                data_[feature] = float(t[1]) if '.' in t[1] else int(t[1])
+            dataList.append(data_)
+        self.__dataSet = DataSet(dataList, max_f_index)
+    
+    
+    
     def get_dataSet(self):
         return self.__dataSet
     
@@ -76,7 +112,7 @@ class DataSet(object):
         for i in range(len(self.__data)):
             for key, value in self.__data[i].iteritems():
                 # ignore label
-                if key == 'class': 
+                if key == 'target': 
                     self.__matrix[i][0] = 1
                     self.__target[i] = value
                     continue

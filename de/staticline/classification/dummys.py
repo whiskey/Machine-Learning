@@ -27,10 +27,10 @@ class Always1Predictor(object):
         correct = 0.
         sum_error = 0
         for i in testdata.get_data():
-            if i['class'] == 1: #correct
+            if i['target'] == 1: #correct
                 correct += 1.
             else:
-                sum_error += math.pow(1 - i['class'], 2)
+                sum_error += math.pow(1 - i['target'], 2)
         # percent correct
         self.__pct_correct = 100 * (correct/self.__inst_test)
         # root mean squared error

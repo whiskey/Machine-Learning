@@ -22,15 +22,17 @@ class RidgeRegression(object):
         x = matrix(train.get_matrix())
         y = matrix(train.get_target())
         
-        xTx = dot(x.transpose(),x)
-        m1 = inv(xTx + self.__complexity * eye(xTx.shape[0],xTx.shape[1]))
-        self.__model = dot(dot(m1,x.transpose()),y)
+        xTx = dot(x.T,x)
+        # (X'X + λI)^-1
+        m1 = inv(xTx + self.__complexity * xTx.I)
+        # 
+        self.__model = dot(dot(m1,x.T),y)
         
         #RSS(λ) = (y − Xβ)T (y − Xβ) + λβT β
-        f1 = transpose(y - dot(x,self.get_model()))
-        f2 = y - dot(x,self.get_model())
-        f3 = dot(dot(self.__complexity,self.__model.transpose()),self.__model)
-        self.__rss = dot(f1,f2) + f3
+        #         ---f1--T  ---f1--   --f2--
+        f1 = y - dot(x,self.get_model())
+        f2 = dot(dot(self.__complexity,self.__model.T),self.__model)
+        self.__rss = dot(f1.T,f1) + f2
         #TODO: validate RSS        
         
     def validate_model(self, test):#FIXME: make new

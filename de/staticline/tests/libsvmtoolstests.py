@@ -39,6 +39,16 @@ class DataFetchTestCase(unittest.TestCase):
         with self.assertRaises(IndexError):
             #should not exist
             self.assertTrue(ds.get_target(3) == -1)
+    
+    def testBinaryImport(self):
+        cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
+        # should do
+        importer = LibsvmFileImporter(os.path.join(cwd,'data/a1a'),binary=True)
+        importer.get_dataSet()
+        
+        # should fail
+        with self.assertRaises(TypeError):
+            importer = LibsvmFileImporter(os.path.join(cwd,'data/satimage.scale'),binary=True)
 
 if __name__ == "__main__":
     unittest.main()
