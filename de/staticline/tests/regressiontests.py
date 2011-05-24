@@ -5,7 +5,7 @@ Created on May 6, 2011
 '''
 import unittest
 from numpy import *
-from de.staticline.regression.simpleregression import RidgeRegression
+from de.staticline.regression.linreg import RidgeRegression
 from de.staticline.tools.libsvmtools import DataSet
 
 class RidgeRegressionTestCase(unittest.TestCase):
