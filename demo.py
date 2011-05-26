@@ -4,7 +4,7 @@ Created on May 7, 2011
 @author: "Carsten Witzke"
 '''
 from de.staticline.tools.libsvmtools import LibsvmFileImporter
-from de.staticline.regression.simpleregression import RidgeRegression
+from de.staticline.regression.linreg import RidgeRegression
 
 
 def regressionDemo():
