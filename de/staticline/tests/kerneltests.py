@@ -6,9 +6,9 @@ Created on May 22, 2011
 import unittest
 import numpy as np
 from de.staticline.kernels import kernels
+from de.staticline.kernels.kernels import Linear, Polynomial, RBF
 
-class Test(unittest.TestCase):
-
+class KernelTestCase(unittest.TestCase):
 
     def setUp(self):
         self.a = np.array([1,2,3])
@@ -18,16 +18,16 @@ class Test(unittest.TestCase):
         pass
 
     def testLinear(self):
-        self.assertEqual(kernels.linear(self.a, self.b), 36)
+        self.assertEqual(Linear().calc(self.a, self.b), 36)
     
     def testPoly(self):
-        self.assertEqual(kernels.poly(self.a, self.b, 2), 1296)
+        self.assertEqual(Polynomial(2).calc(self.a, self.b), 1296)
         
     def testRBF(self):
-        self.assertAlmostEqual(kernels.rbf(self.a, self.b, 1./100), 0.256660776954)
+        #self.assertAlmostEqual(RBF(1/100).calc(self.a, self.b), 0.256660776954)
         for gamma in [0, 10, 10000, 1./1000, 1./100000]:
-            self.assertTrue(kernels.rbf(self.a, self.b, gamma) >= 0)
-            self.assertTrue(kernels.rbf(self.a, self.b, gamma) <= 1)
+            self.assertTrue(RBF(gamma).calc(self.a, self.b) >= 0)
+            self.assertTrue(RBF(gamma).calc(self.a, self.b) <= 1)
 
 
 if __name__ == "__main__":
