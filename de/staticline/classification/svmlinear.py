@@ -95,11 +95,3 @@ class DualCoordinateDescent(object):
     accuracy = property(get_accuracy, set_accuracy, doc='accuracy value of the model')
     kernel = property(get_kernel, set_kernel, doc='the models kernel')
 #    alpha = property(get_alpha, doc='alpha values')
-    
-if __name__ == '__main__':
-    x = np.array([[1,1],[1,2],[-1,1],[-1,2]])
-    y = np.array([1,1,0,0])
-    DualCoordinateDescent().train(x, y)
-    #Results: -----> not verified atm! <------
-    # alpha: [ 0.5  0.   1.   1. ]
-    # beta: [[ 0.5  0.5]]
