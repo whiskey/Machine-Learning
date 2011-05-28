@@ -15,8 +15,8 @@ class DummyClassificatorTestCase(unittest.TestCase):
         cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
         
         dummy = Always1Predictor()
-        dummy.buildClassifier(os.path.join(cwd,'data/a1a'))
-        dummy.validateModel(os.path.join(cwd,'data/a1a.t'))
+        dummy.buildClassifier(os.path.join(cwd,'data/classification/a1a'))
+        dummy.validateModel(os.path.join(cwd,'data/classification/a1a.t'))
         self.assertTrue(dummy.get_pctCorrect() > 24) # for data set a1a !!!
 
 

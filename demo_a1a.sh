@@ -1,0 +1,1 @@
+./classify.py -c svm-cd --training-file=./data/classification/a1a --test-file=./data/classification/a1a.t

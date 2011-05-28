@@ -1,0 +1,11 @@
+@relation lin_reg
+
+@attribute x numeric
+@attribute y numeric
+
+@data
+0,1
+1,1.5
+2,1.7
+3,2.4
+4,3.1

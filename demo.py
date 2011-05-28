@@ -8,6 +8,7 @@ from de.staticline.regression.linreg import RidgeRegression
 
 
 def regressionDemo():
+    '''how to use this modules as library'''
     # get data sets from file
     trainingSet = LibsvmFileImporter('data/regression/cadata.txt').get_dataSet()
     #testSet = LibsvmFileImporter('data/lin_reg.t').get_dataSet()
@@ -25,7 +26,7 @@ def regressionDemo():
         # get RSS
         print u'RSS(\u03bb=%d): %f' % (rr.get_lambda(),rr.get_rss())
         # validation
-        #rr.validate_model(testSet) #currently not implemented
+        ##currently not implemented
 
 if __name__ == '__main__':
     regressionDemo()

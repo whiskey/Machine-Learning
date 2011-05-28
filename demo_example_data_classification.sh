@@ -1,0 +1,1 @@
+./classify.py -c svm-cd --training-file=./data/classification/example_data_classification --test-file=./data/classification/example_data_classification.t

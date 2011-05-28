@@ -3,21 +3,22 @@ Created on May 6, 2011
 
 @author: Carsten Witzke
 '''
+
+import numpy as np
 import unittest
-from numpy import *
+import sys, os
 from de.staticline.regression.linreg import RidgeRegression
-from de.staticline.tools.libsvmtools import DataSet
+from de.staticline.tools.libsvmtools import DataSet, LibsvmFileImporter
 
 class RidgeRegressionTestCase(unittest.TestCase):
 
     def testRidgeRegression(self):
-        _x = matrix('1 1 2; 1 2 3; 1 4 1; 1 5 5')
-        _y = matrix('3;2;7;1')
-        trainSet = DataSet(max_f_index=3, x=_x, y=_y)
+        cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
+        data = LibsvmFileImporter(os.path.join(cwd,'data/regression/lin_reg')).get_dataSet()
         rr = RidgeRegression(5)
-        rr.trainModel(trainSet)
-        #TODO: implement test case
-        #print 'model:\n',rr.get_model()
+        rr.trainModel(data)
+        #TODO: create test
+        self.assertTrue(True)
         
 
 if __name__ == "__main__":

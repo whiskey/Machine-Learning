@@ -1,12 +1,11 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 '''
 Created on Apr 29, 2011
 
 @author: Carsten Witzke
 '''
 
-from numpy import *
+import numpy as np
 from numpy.linalg.linalg import inv
 
 class RidgeRegression(object):
@@ -19,25 +18,40 @@ class RidgeRegression(object):
         self.set_lambda(complexity)
 
     def trainModel(self, train):
-        x = matrix(train.get_matrix())
-        y = matrix(train.get_target())
+        instances = train.get_features()
+        ones = np.ones((instances.shape[0],1))
+        instances = np.matrix(np.concatenate((ones,instances), axis=1))
+        targets = np.matrix(train.get_targets())
         
-        xTx = dot(x.T,x)
-        # (X'X + λI)^-1
-        m1 = inv(xTx + self.__complexity * xTx.I)
-        # 
-        self.__model = dot(dot(m1,x.T),y)
+        # build model - FIXME: currently only correct with complex. = 0
+        xTx = np.dot(instances.T, instances)
+        xTx += np.dot(self.__complexity, np.eye(xTx.shape[0],xTx.shape[1]))
+        xTy = np.dot(instances.T, targets)
+        solution = np.linalg.lstsq(xTx, xTy)
+        self.__model = solution[0] #model
+
+#        xTx = np.dot(instances.T,instances)
+#        m1 = inv(xTx + self.__complexity * xTx.I)
+#        self.__model = np.dot(np.dot(m1,instances.T),targets)
         
-        #RSS(λ) = (y − Xβ)T (y − Xβ) + λβT β
-        #         ---f1--T  ---f1--   --f2--
-        f1 = y - dot(x,self.get_model())
-        f2 = dot(dot(self.__complexity,self.__model.T),self.__model)
-        self.__rss = dot(f1.T,f1) + f2
-        #TODO: validate RSS        
+        # RSS
+        self.__rss = 0
+        for i in range(len(train.get_features())):
+            fx = self.__model[1] * train.get_features()[i] + self.__model[0]
+            self.__rss += (targets[i] -  fx)**2
+        
+        self.__rmse = np.sqrt(self.__rss / (train.get_numInstances()-2))
+#        f1 = targets - np.dot(instances,self.get_model())
+#        f2 = np.dot(np.dot(self.__complexity,self.__model.T),self.__model)
+#        self.__rss = np.dot(f1.T,f1) + f2
+        
+        # RMSE
+        
+        
         
     def validate_model(self, test):#FIXME: make new
-        testdata = matrix(test.get_matrix())
-#        sum_error = 0
+        pass
+#        testdata = np.array(test.get_np.array(get_features  sum_error = 0)
 #        for i in testdata:
 #            x = float(i[:,0])
 #            predicted = self.get_slope() * x + self.get_intercept()
@@ -56,8 +70,12 @@ class RidgeRegression(object):
         return self.__model
     
     def get_rss(self):
-        return self.__rss
+        return float(self.__rss)
+    
+    def get_rmse(self):
+        return float(self.__rmse)
     
     complexity = property(get_lambda, set_lambda, doc='the model complexity factor lambda')
     model = property(get_model, doc='the learned model')
     rss = property(get_rss, doc='residual sum of squares')
+    rmse = property(get_rmse, doc='root mean squared error')

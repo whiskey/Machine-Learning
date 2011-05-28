@@ -12,14 +12,14 @@ class DualCoordinateDescent(object):
     def __init__(self):
         pass
     
-    def train(self, predictors, targets, complxity, accuracy, kernel=poly):
+    def train(self, predictors, targets, complexity, accuracy, kernel=poly):
         '''Dual coordinate descent implementation'''
         #init alpha and beta with zeros
-        alpha = np.zeros(targets.shape)
-        beta = np.zeros((1,(predictors.shape[1])))
+        alpha = np.zeros(len(targets))
+        beta = np.zeros((predictors.shape[1]))
         
         #init vector for all delta alphas with value infinity
-        delta_alpha = float('inf') * np.ones(alpha.shape)
+        delta_alpha = float('inf') * np.ones(len(alpha))
         #loop
                     
         while self.__foundDA(delta_alpha, accuracy):
@@ -28,7 +28,7 @@ class DualCoordinateDescent(object):
             for i in indices:
                 #delta alpha
                 x = (1 - float(targets[i]) * np.dot(beta, predictors[i]))/kernel(predictors[i])
-                delta_alpha[i] = self.__bounded(x, float(alpha[i]), complxity)
+                delta_alpha[i] = self.__bounded(x, float(alpha[i]), complexity)
                 #alpha_i
                 alpha[i] += delta_alpha[i]
                 #beta_i
@@ -42,7 +42,7 @@ class DualCoordinateDescent(object):
         if x < -ai: return -ai
         elif x > gamma-ai: return gamma-ai
         else: return x
-            
+
     def __foundDA(self, list, acc):
         # ugly method - TODO: improve (np.exp())
         found = False
@@ -50,7 +50,7 @@ class DualCoordinateDescent(object):
             if math.fabs(i) > acc:
                 found = True
         return found
-    
+
     
 if __name__ == '__main__':
     #print 'TODO: handle command line parameters'

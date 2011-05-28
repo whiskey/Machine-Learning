@@ -44,7 +44,7 @@ class LibsvmFileImporter(object):
                 # something left? go!
                 data_ = {}
                 tokens = deque(line.split(' '))
-                data_['target'] = float(tokens.popleft())
+                data_['targets'] = float(tokens.popleft())
                 for token in tokens:
                     t = token.split(':')
                     feature = int(t[0])
@@ -72,10 +72,10 @@ class LibsvmFileImporter(object):
             # something left? go!
             data_ = {}
             tokens = deque(line.split(' '))
-            data_['target'] = float(tokens.popleft())
+            data_['targets'] = float(tokens.popleft())
             if len(targetList) <= 2:
-                if data_['target'] not in targetList:
-                    targetList.append(data_['target'])
+                if data_['targets'] not in targetList:
+                    targetList.append(data_['targets'])
             else:
                 raise TypeError('Not a binary class file')
             for token in tokens:
@@ -94,38 +94,35 @@ class LibsvmFileImporter(object):
     
 
 class DataSet(object):
-    '''a data set'''
-        
-    def __init__(self, data=None, max_f_index=None, x=None, y=None):#TODO: handle max_f_index internally!
-        if x != None and y != None:
-            self.__matrix = x
-            self.__target = y
-            self.__numInstances, self.__numFeatures = self.__matrix.shape
-            return
-        self.__data = data
-        self.__build_matrix(max_f_index)
+    '''Internal representation of a data set'''
+    def __init__(self, data, max_f_index=None):#TODO: handle max_f_index internally!
+        #max_f_index = max feature index ---> defines the dimensionality of the features
+#        if x != None and y != None:
+#            self.__matrix = x
+#            self.__target = y
+#            self.__numInstances, self.__numFeatures = self.__matrix.shape
+#            return
+        self.__build(data, max_f_index)
         self.__numInstances, self.__numFeatures = self.__matrix.shape
     
-    def __build_matrix(self, max_f_index):
-        self.__matrix = numpy.zeros(shape=(len(self.__data),len(range(max_f_index))+1))
-        self.__target = numpy.zeros(shape=(len(self.__data),1))
-        for i in range(len(self.__data)):
-            for key, value in self.__data[i].iteritems():
+    def __build(self, data, max_f_index):
+        '''build instance features and targets vector'''
+        self.__matrix = numpy.zeros(shape=(len(data),len(range(max_f_index))))
+        self.__target = numpy.zeros(shape=(len(data),1))
+        for i in range(len(data)):
+            for key, value in data[i].iteritems():
                 # ignore label
-                if key == 'target': 
-                    self.__matrix[i][0] = 1
+                if key == 'targets': 
+                    #self.__matrix[i][0] = 1
                     self.__target[i] = value
                     continue
-                self.__matrix[i][key] = value
+                self.__matrix[i][key-1] = value
 
     ## getter / setter ##
-    def get_data(self):
-        return self.__data
-    
-    def get_matrix(self):
+    def get_features(self):
         return self.__matrix
     
-    def get_target(self,index=None):
+    def get_targets(self,index=None):
         if index != None:
             return int(self.__target[index])
         return self.__target
@@ -135,10 +132,10 @@ class DataSet(object):
     
     def get_numFeatures(self):
         return self.__numFeatures - 1
-        
+
     ## properties
-    data = property(get_data, doc='old data format: list of dictionaries')
-    matrix = property(get_matrix, doc='feature vector X')
-    target = property(get_target, doc='target vector Y')
+    #data = property(doc='initial data format: list of dictionaries (will be deleted after features/vector initialization')
+    features = property(get_features, doc='features X (n x m)')
+    targets = property(get_targets, doc='targets vector Y (n x 1)')
     numInstances = property(get_numInstances)
     numFeatures = property(get_numFeatures)

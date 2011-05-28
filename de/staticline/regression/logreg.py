@@ -14,14 +14,11 @@ class LogisticRegression(object):
         pass
     
     def trainModel(self, train):
-        x = np.matrix(train.get_matrix())
-        y = np.matrix(train.get_target())
-        
-        ones = np.ones((x.shape[0],1))
-        x = np.concatenate((ones,x), axis=1)
+        pass
 
 
 if __name__ == '__main__':
-    _x = np.matrix('1 1 2; 1 2 3; 1 4 1; 1 5 5')
-    _y = np.matrix('3;2;7;1')
+    #debug
+    _x = np.array('1 1 2; 1 2 3; 1 4 1; 1 5 5')
+    _y = np.array('3;2;7;1')
     trainSet = DataSet(max_f_index=3, x=_x, y=_y)
