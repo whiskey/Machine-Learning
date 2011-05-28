@@ -21,7 +21,7 @@ class DataFetchTestCase(unittest.TestCase):
             
     def testImportData(self):
         cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
-        l = LibsvmFileImporter(os.path.join(cwd,'data/classification/debug'))
+        l = LibsvmFileImporter(os.path.join(cwd,'data/classification/debug'), binary=True)
         ds = l.get_dataSet()
         ''' contents of the debug file
         -1 3:1.4324 76:1 80:1 83:1
@@ -47,7 +47,7 @@ class DataFetchTestCase(unittest.TestCase):
         importer.get_dataSet()
         
         # should fail
-        with self.assertRaises(TypeError):
+        with self.assertRaises(TypeError): #multi-class data
             importer = LibsvmFileImporter(os.path.join(cwd,'data/classification/satimage.scale'),binary=True)
 
 if __name__ == "__main__":

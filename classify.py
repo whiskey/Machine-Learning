@@ -69,8 +69,8 @@ def main(argv):
         print 'No test file specified.'
         usage()
         sys.exit()
-    training = LibsvmFileImporter(trainingFile).get_dataSet()
-    testing = LibsvmFileImporter(testFile).get_dataSet()
+    training = LibsvmFileImporter(trainingFile, binary=True).get_dataSet()
+    testing = LibsvmFileImporter(testFile, binary=True).get_dataSet()
     
     #TODO: parameter handling
     complexity = 1

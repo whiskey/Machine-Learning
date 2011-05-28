@@ -14,7 +14,7 @@ class RidgeRegressionTestCase(unittest.TestCase):
 
     def testRidgeRegression(self):
         cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
-        data = LibsvmFileImporter(os.path.join(cwd,'data/regression/lin_reg')).get_dataSet()
+        data = LibsvmFileImporter(os.path.join(cwd,'data/regression/lin_reg'), binary=False).get_dataSet()
         rr = RidgeRegression(5)
         rr.trainModel(data)
         #TODO: create test

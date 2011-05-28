@@ -23,7 +23,7 @@ class LibsvmFileImporter(object):
         except IOError:
             raise IOError('No such file \'%s\'' % filename)
         
-        if binary:
+        if binary:#TODO: find out if binary or not
             self.__read_binary_data()
         else:
             self.__read_data()
@@ -44,7 +44,7 @@ class LibsvmFileImporter(object):
                 # something left? go!
                 data_ = {}
                 tokens = deque(line.split(' '))
-                data_['targets'] = float(tokens.popleft())
+                data_['target'] = float(tokens.popleft())
                 for token in tokens:
                     t = token.split(':')
                     feature = int(t[0])
@@ -72,10 +72,10 @@ class LibsvmFileImporter(object):
             # something left? go!
             data_ = {}
             tokens = deque(line.split(' '))
-            data_['targets'] = float(tokens.popleft())
+            data_['target'] = float(tokens.popleft())
             if len(targetList) <= 2:
-                if data_['targets'] not in targetList:
-                    targetList.append(data_['targets'])
+                if data_['target'] not in targetList:
+                    targetList.append(data_['target'])
             else:
                 raise TypeError('Not a binary class file')
             for token in tokens:
@@ -85,8 +85,24 @@ class LibsvmFileImporter(object):
                     max_f_index = feature
                 data_[feature] = float(t[1]) if '.' in t[1] else int(t[1])
             dataList.append(data_)
+        #normalization of targets: e.g.'0 & 1 ==> -1 & +1'
+        #bonus: handling of ordinal values like 'green & blue'
+        try:
+            a = int(targetList[0])
+            b = int(targetList[1])
+            #larger value becomes '+1'
+            if a > b:
+                for i in dataList:
+                    i['target'] = +1 if int(i['target']) == a else -1
+            else:
+                for i in dataList:
+                    i['target'] = -1 if int(i['target']) == a else +1
+        except ValueError:
+            #value is not int - set classes
+            for i in dataList:
+                dataList[i]['target'] = +1 if dataList[i]['target'] == targetList[0] else -1
         self.__dataSet = DataSet(dataList, max_f_index)
-    
+        
     
     
     def get_dataSet(self):
@@ -106,13 +122,13 @@ class DataSet(object):
         self.__numInstances, self.__numFeatures = self.__matrix.shape
     
     def __build(self, data, max_f_index):
-        '''build instance features and targets vector'''
+        '''build instance features and target vector'''
         self.__matrix = numpy.zeros(shape=(len(data),len(range(max_f_index))))
         self.__target = numpy.zeros(shape=(len(data),1))
         for i in range(len(data)):
             for key, value in data[i].iteritems():
                 # ignore label
-                if key == 'targets': 
+                if key == 'target': 
                     #self.__matrix[i][0] = 1
                     self.__target[i] = value
                     continue
@@ -136,6 +152,6 @@ class DataSet(object):
     ## properties
     #data = property(doc='initial data format: list of dictionaries (will be deleted after features/vector initialization')
     features = property(get_features, doc='features X (n x m)')
-    targets = property(get_targets, doc='targets vector Y (n x 1)')
+    targets = property(get_targets, doc='target vector Y (n x 1)')
     numInstances = property(get_numInstances)
     numFeatures = property(get_numFeatures)

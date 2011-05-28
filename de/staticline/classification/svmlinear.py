@@ -12,7 +12,7 @@ class DualCoordinateDescent(object):
     def __init__(self):
         pass
     
-    def train(self, predictors, targets, complexity, accuracy, kernel=poly):
+    def train(self, predictors, targets, complexity=1, accuracy=1e-10, kernel=poly):
         '''Dual coordinate descent implementation'''
         #init alpha and beta with zeros
         alpha = np.zeros(len(targets))
@@ -53,10 +53,9 @@ class DualCoordinateDescent(object):
 
     
 if __name__ == '__main__':
-    #print 'TODO: handle command line parameters'
     x = np.array([[1,1],[1,2],[-1,1],[-1,2]])
     y = np.array([1,1,0,0])
-    DualCoordinateDescent().train(x, y, 1, 1e-10)
+    DualCoordinateDescent().train(x, y)
     #Results: -----> not verified atm! <------
     # alpha: [ 0.5  0.   1.   1. ]
     # beta: [[ 0.5  0.5]]
