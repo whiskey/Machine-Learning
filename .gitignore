@@ -5,5 +5,7 @@
 .pydevproject*
 .settings
 .checkstyle*
-data.db
 playground.*
+
+
+data/
