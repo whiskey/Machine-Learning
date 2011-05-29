@@ -16,7 +16,7 @@ class DualCoordinateDescent(object):
         self.__verbose = verbose
         
     def __repr__(self):
-        return 'SVM dial coordinate descent implementation. Parameters:\n'\
+        return 'SVM dual coordinate descent implementation. Parameters:\n'\
             '  complexity: {comp}\n  accuracy: {acc}\n  kernel: {kernel}'\
             .format(comp=self.get_complexity(), acc=self.get_accuracy(), kernel=self.get_kernel())
     
