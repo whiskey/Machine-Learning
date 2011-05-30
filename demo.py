@@ -11,8 +11,8 @@ from de.staticline.regression.linreg import RidgeRegression
 def regressionDemo():
     '''how to use this modules as library'''
     # get data sets from file
-    trainingSet = LibsvmFileImporter('data/regression/cadata.txt').get_dataSet()
-    #testSet = LibsvmFileImporter('data/lin_reg.t').get_dataSet()
+    trainingSet = LibsvmFileImporter('./data/regression/lin_reg').get_dataSet()
+    #testSet = LibsvmFileImporter('./data/lin_reg.t').get_dataSet()
     
     # make new ridge regression
     rr = RidgeRegression()
@@ -23,9 +23,9 @@ def regressionDemo():
         # train the model
         rr.trainModel(trainingSet)
         # get model
-        #print 'model:\n%s' % rr.get_model()
+        print 'model:\n%s' % rr.get_model()
         # get RSS
-        print u'RSS(\u03bb=%d): %f' % (rr.get_lambda(),rr.get_rss())
+        #print u'RSS(\u03bb=%d): %f' % (rr.get_lambda(),rr.get_rss())
         # validation
         ##currently not implemented
 

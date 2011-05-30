@@ -21,7 +21,7 @@ class RidgeRegression(object):
         instances = train.get_features()
         ones = np.ones((instances.shape[0],1))
         instances = np.matrix(np.concatenate((ones,instances), axis=1))
-        targets = np.matrix(train.get_targets())
+        targets = np.array(train.get_targets())
         
         # build model - FIXME: currently only correct with complex. = 0
         xTx = np.dot(instances.T, instances)
@@ -36,9 +36,9 @@ class RidgeRegression(object):
         
         # RSS
         self.__rss = 0
-        for i in range(len(train.get_features())):
-            fx = self.__model[1] * train.get_features()[i] + self.__model[0]
-            self.__rss += (targets[i] -  fx)**2
+#        for i in range(len(train.get_features())):
+#            fx = self.__model[1] * train.get_features()[i] + self.__model[0]
+#            self.__rss += (targets[i] -  fx)**2 #FIXME: ValueError: input must be a square array
         
         self.__rmse = np.sqrt(self.__rss / (train.get_numInstances()-2))
 #        f1 = targets - np.dot(instances,self.get_model())
