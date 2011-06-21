@@ -136,7 +136,7 @@ class DataSet(object):
                 self.__matrix[i][key-1] = value
 
     ## getter / setter ##
-    def get_features(self):
+    def get_instances(self):
         return self.__matrix
     
     def get_targets(self,index=None):
@@ -152,7 +152,7 @@ class DataSet(object):
 
     ## properties
     #data = property(doc='initial data format: list of dictionaries (will be deleted after features/vector initialization')
-    features = property(get_features, doc='features X (n x m)')
+    features = property(get_instances, doc='features X (n x m)')
     targets = property(get_targets, doc='target vector Y (n x 1)')
     numInstances = property(get_numInstances)
     numFeatures = property(get_numFeatures)
