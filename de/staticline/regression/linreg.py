@@ -40,12 +40,12 @@ class RidgeRegression(object):
 #            fx = self.__model[1] * train.get_features()[i] + self.__model[0]
 #            self.__rss += (targets[i] -  fx)**2 #FIXME: ValueError: input must be a square array
         
-        self.__rmse = np.sqrt(self.__rss / (train.get_numInstances()-2))
 #        f1 = targets - np.dot(instances,self.get_model())
 #        f2 = np.dot(np.dot(self.__complexity,self.__model.T),self.__model)
 #        self.__rss = np.dot(f1.T,f1) + f2
         
         # RMSE
+        self.__rmse = np.sqrt(self.__rss / (train.get_numInstances()-2))
         
         
         
