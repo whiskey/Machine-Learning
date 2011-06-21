@@ -1,11 +1,11 @@
 ## Overview
-Some practical implementations of popular machine learning algorithms.
+Some implementations of popular machine learning algorithms.
 Data is partially taken from the LIBSVM data sets[1].
 
 ### Usage
 Running the demo file is easy:
 
-    $ python demo.py
+    $ ./demo_example_data_classification.sh
     
 This should do it. Make sure NumPy is installed and added to your PYTHONPATH. To check this, type
 
@@ -18,14 +18,15 @@ and in the Python shell
 if no error occurs, NumPy is installed correctly.
 
 ### Currently implemented
-* Ridge Regression
-
-### TODO
-* fine tuning Ridge Regression
-* output validation R.R.
-* logistic regression
-* SVMs (SMO +variants)
-* make test suite
+* Regression
+** Ridge Regression
+* Classification
+** SVM (dual coordinate descent)
+** SVM (SMO - Keerthi et. al., 2001)
+* Kernels
+** linear
+** polynomial
+** radial basis function
 
 ### Links
 [1] http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/

@@ -6,7 +6,9 @@ Created on May 26, 2011
 
 import math
 import numpy as np
+from collections import deque
 from de.staticline.kernels.kernels import Polynomial
+from numpy import linalg
 
 class DualCoordinateDescent(object):
     def __init__(self,complexity=1, accuracy=1e-10, kernel=Polynomial(2), verbose=False):
@@ -95,3 +97,109 @@ class DualCoordinateDescent(object):
     accuracy = property(get_accuracy, set_accuracy, doc='accuracy value of the model')
     kernel = property(get_kernel, set_kernel, doc='the models kernel')
 #    alpha = property(get_alpha, doc='alpha values')
+
+class StochasticBatchDescent(object):
+    '''Stochastic/Batch subgradient descent implementation.'''
+    
+    def __init__(self, regularization=1, accuracy=1e-10, stepLength=0.5, stopCount=10, sampleSize=1):
+        self.__regularization = regularization
+        self.__accuracy = accuracy
+        self.__stepLength = stepLength
+        self.__stopCount = stopCount
+        self.__sampleSize = sampleSize
+        
+    def train(self, instances, targets):    
+        #init values
+        self.__intercept = 0
+        self.__beta = np.zeros(len(instances[0]))
+        currentAccuracy = float('infinity')
+        numInstances = len(instances)
+        last_results = deque(maxlen=self.__stopCount)
+        
+        while currentAccuracy >= self.__accuracy:
+            # doing this every time is not a speedbump but an easy way to show the only
+            ### different stocastic vs. batch descent ###
+            if(self.__sampleSize == 1):
+                # draw ONE item
+                i = np.random.randint(0,numInstances)
+                #FIXME: currently not implemented
+                # compute delta beta
+                delta_beta = 0#dummy
+                # compute delta intercept
+                delta_intercept = 0#dummy
+            else:
+                # draw subset (indices)
+                indices = range(len(instances))
+                np.random.shuffle(indices)
+                subset = indices[:self.__sampleSize]
+                # compute delta beta and intercept
+                sum_subset_y = 0
+                sum_subset_yx = 0
+                for i in subset:
+                    x = targets[i] * (self.__beta.T * instances[i] + self.__intercept)
+                    if x < 1:#FIXME: shape x is 'm x m' not 1 - misinterpretation of slides?
+                        sum_subset_y += (x * targets[i])
+                        sum_subset_yx += (x * targets[i] * instances[i])
+                delta_beta = -1/self.__sampleSize * sum_subset_yx
+                delta_intercept = -1/self.__sampleSize * sum_subset_y                
+            ### same for stochastic and batch ###
+            #update beta
+            self.__beta = (1-self.__stepLength*self.__regularization) * self.__beta \
+                - self.__stepLength * delta_beta
+            #update intercept
+            self.__intercept = self.__intercept - self.__stepLength * delta_intercept
+            #compute current accuracy
+            last_results.append(self.__stepLength * linalg.norm(delta_beta))
+            currentAccuracy = sum(last_results)
+        #debug
+        print 'done\nbeta0 = {intercept:.4f}\nbeta = {beta}'.format(intercept=self.__intercept,beta=self.__beta)
+        
+
+    def get_regularization(self):
+        return self.__regularization
+
+    def get_accuracy(self):
+        return self.__accuracy
+
+    def get_step_length(self):
+        return self.__stepLength
+
+    def get_stop_count(self):
+        return self.__stopCount
+    
+    def get_sample_size(self):
+        return self.__sampleSize
+    
+    def get_intercept(self):
+        return self.__intercept
+    
+    def get_beta(self):
+        return self.__beta
+
+    def set_regularization(self, value):
+        self.__regularization = value
+
+    def set_accuracy(self, value):
+        self.__accuracy = value
+
+    def set_step_length(self, value):
+        self.__stepLength = value
+
+    def set_stop_count(self, value):
+        if value <= 0:
+            value = 10
+        self.__stopCount = value
+        
+    def set_sample_size(self, value):
+        if value <= 0:
+            value = 1
+        self.__sampleSize = value
+
+    ### properties
+    intercept = property(get_intercept, doc="intercept of the model")
+    beta = property(get_beta, doc="beta values")
+    regularization = property(get_regularization, set_regularization, doc="regularization value")
+    accuracy = property(get_accuracy, set_accuracy, doc="accuracy value of the model")
+    stepLength = property(get_step_length, set_step_length, doc="step length of the gradient descent")
+    stopCount = property(get_stop_count, set_stop_count, doc="stop count")
+    sampleSize = property(get_sample_size, set_sample_size, doc="sample size; 1 means stochastic, 2+ batch")

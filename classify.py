@@ -115,11 +115,11 @@ def main(argv):
     if classifier.__class__ == DualCoordinateDescent().__class__:
         classifier.set_kernel(kernel)
         if verbose: print classifier
-        classifier.train(training.get_features(), training.get_targets())
+        classifier.train(training.get_instances(), training.get_targets())
     elif classifier.__class__ == SMO_Keerthi().__class__:
         classifier.set_kernel(kernel)
         if verbose: print classifier
-        classifier.train(training.get_features(), training.get_targets())
+        classifier.train(training.get_instances(), training.get_targets())
         print '# support vectors:',classifier.get_num_support_vectors()
     
     

@@ -5,11 +5,11 @@ Created on May 19, 2011
 '''
 import numpy as np
 from de.staticline.kernels.kernels import Polynomial
-from aetypes import Property
 
 
 class SMO_Keerthi(object):
-    
+    '''SMO (Keerthi 2001) implementation'''
+        
     def __init__(self,complexity=1, accuracy=1e-10, kernel=Polynomial(2), verbose=False):
         self.set_complexity(complexity)
         self.set_accuracy(accuracy)
@@ -22,7 +22,6 @@ class SMO_Keerthi(object):
             .format(comp=self.get_complexity(), acc=self.get_accuracy(), kernel=self.get_kernel())
     
     def train(self, instances, targets):
-        '''SMO (Keerthi 2001) implementation'''
         self.__alpha = np.zeros(len(targets))
         f = targets[:] #copy - necessary?
         
@@ -114,4 +113,5 @@ class SMO_Keerthi(object):
     kernel = property(get_kernel, set_kernel, doc='the models kernel')
     alpha = property(get_alpha, doc='alpha values')
     num_support_vectors = property(get_num_support_vectors, doc='the number of support vectors')
-    verbose = property(doc='print tons of more or less usefull stuff?')
+    verbose = property(doc='print tons of more or less useful stuff?')
+   

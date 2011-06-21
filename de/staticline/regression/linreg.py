@@ -18,7 +18,7 @@ class RidgeRegression(object):
         self.set_lambda(complexity)
 
     def trainModel(self, train):
-        instances = train.get_features()
+        instances = train.get_instances()
         ones = np.ones((instances.shape[0],1))
         instances = np.matrix(np.concatenate((ones,instances), axis=1))
         targets = np.array(train.get_targets())
@@ -36,8 +36,8 @@ class RidgeRegression(object):
         
         # RSS
         self.__rss = 0
-#        for i in range(len(train.get_features())):
-#            fx = self.__model[1] * train.get_features()[i] + self.__model[0]
+#        for i in range(len(train.get_instances())):
+#            fx = self.__model[1] * train.get_instances()[i] + self.__model[0]
 #            self.__rss += (targets[i] -  fx)**2 #FIXME: ValueError: input must be a square array
         
         self.__rmse = np.sqrt(self.__rss / (train.get_numInstances()-2))
@@ -51,7 +51,7 @@ class RidgeRegression(object):
         
     def validate_model(self, test):#FIXME: make new
         pass
-#        testdata = np.array(test.get_np.array(get_features  sum_error = 0)
+#        testdata = np.array(test.get_np.array(get_instances  sum_error = 0)
 #        for i in testdata:
 #            x = float(i[:,0])
 #            predicted = self.get_slope() * x + self.get_intercept()
