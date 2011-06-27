@@ -111,18 +111,19 @@ class StochasticBatchDescent(object):
     def train(self, instances, targets):    
         #init values
         self.__intercept = 0
-        self.__beta = np.zeros(len(instances[0]))
+        self.__beta = np.zeros((instances.shape[1]))
         currentAccuracy = float('infinity')
         numInstances = len(instances)
         last_results = deque(maxlen=self.__stopCount)
         
         while currentAccuracy >= self.__accuracy:
             # doing this every time is not a speedbump but an easy way to show the only
-            ### different stocastic vs. batch descent ###
+            ### different stochastic vs. batch descent ###
             if(self.__sampleSize == 1):
                 # draw ONE item
                 i = np.random.randint(0,numInstances)
                 #FIXME: currently not implemented
+                print 'currently not implemented'
                 # compute delta beta
                 delta_beta = 0#dummy
                 # compute delta intercept
@@ -136,8 +137,8 @@ class StochasticBatchDescent(object):
                 sum_subset_y = 0
                 sum_subset_yx = 0
                 for i in subset:
-                    x = targets[i] * (self.__beta.T * instances[i] + self.__intercept)
-                    if x < 1:#FIXME: shape x is 'm x m' not 1 - misinterpretation of slides?
+                    x = targets[i] * (np.dot(self.__beta.T, instances[i]) + self.__intercept)
+                    if x < 1:
                         sum_subset_y += (x * targets[i])
                         sum_subset_yx += (x * targets[i] * instances[i])
                 delta_beta = -1/self.__sampleSize * sum_subset_yx
@@ -151,8 +152,9 @@ class StochasticBatchDescent(object):
             #compute current accuracy
             last_results.append(self.__stepLength * linalg.norm(delta_beta))
             currentAccuracy = sum(last_results)
+            print 'currentAccuracy: {0:f}'.format(currentAccuracy)
         #debug
-        print 'done\nbeta0 = {intercept:.4f}\nbeta = {beta}'.format(intercept=self.__intercept,beta=self.__beta)
+        print 'beta0 = {intercept}\nbeta = {beta}'.format(intercept=self.__intercept,beta=self.__beta)
         
 
     def get_regularization(self):
