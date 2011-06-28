@@ -6,7 +6,6 @@ Created on May 22, 2011
 '''
 import unittest
 import numpy as np
-from de.staticline.kernels import kernels
 from de.staticline.kernels.kernels import Linear, Polynomial, RBF
 
 class KernelTestCase(unittest.TestCase):

@@ -60,6 +60,7 @@ class SMO_Keerthi(object):
                     if f[k] < argmin_j:
                         j = k
                         argmin_j = f[k]
+            #TODO: build model with only alphas > 0
             
             ## statistics
             if self.__verbose:
@@ -69,6 +70,9 @@ class SMO_Keerthi(object):
                 if a > 0:
                     self.__num_support_vectors += 1
                 
+    def validateModel(self, dataSet):
+        '''quick validation test - will be improved'''
+        pass
     
     def __bounded(self, x, upper, lower):
         '''keeps an input x in the two defined bounds'''

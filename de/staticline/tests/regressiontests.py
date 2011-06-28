@@ -5,11 +5,10 @@ Created on May 6, 2011
 @author: Carsten Witzke
 '''
 
-import numpy as np
 import unittest
 import sys, os
 from de.staticline.regression.linreg import RidgeRegression
-from de.staticline.tools.libsvmtools import DataSet, LibsvmFileImporter
+from de.staticline.tools.libsvmtools import LibsvmFileImporter
 
 class RidgeRegressionTestCase(unittest.TestCase):
 
